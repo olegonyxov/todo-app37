@@ -19,7 +19,12 @@ export default function Todos() {
             setNewTodoTitle('');
         }
     };
-
+    const handleKeyPress = (e) => {
+        if (e.key === 'Enter') {
+            handleAddTodo();
+        }
+    };
+    
     const handleDeleteTodo = (todoId) => {
         dispatch(deleteItem({ id: todoId }));
     };
@@ -45,6 +50,7 @@ export default function Todos() {
                     type="text"
                     value={newTodoTitle}
                     onChange={(e) => setNewTodoTitle(e.target.value)}
+                    onKeyPress={handleKeyPress}
                     placeholder="Add new task"
                 />
                 <button onClick={handleAddTodo}>ADD</button>
