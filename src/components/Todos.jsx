@@ -1,11 +1,13 @@
 import React, { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { addItem, deleteItem } from '../store/reducers/currentTodoSlice';
+import { addItem, deleteItem, editItem } from '../store//reducers/currentTodoSlice';
 
 export default function Todos() {
     const dispatch = useDispatch();
     const todos = useSelector(state => state.currentTodo.data);
     const [newTodoTitle, setNewTodoTitle] = useState('');
+    const [editingTodo, setEditingTodo] = useState(null);
+    const [editingTitle, setEditingTitle] = useState('');
 
     const handleAddTodo = () => {
         if (newTodoTitle.trim() !== '') {
@@ -14,12 +16,25 @@ export default function Todos() {
                 title: newTodoTitle,
             };
             dispatch(addItem(newTodo));
-            setNewTodoTitle(''); 
+            setNewTodoTitle('');
         }
     };
 
     const handleDeleteTodo = (todoId) => {
         dispatch(deleteItem({ id: todoId }));
+    };
+
+    const handleEditTodo = (todo) => {
+        setEditingTodo(todo);
+        setEditingTitle(todo.title);
+    };
+
+    const handleSaveEdit = () => {
+        if (editingTitle.trim() !== '') {
+            dispatch(editItem({ id: editingTodo.id, title: editingTitle }));
+            setEditingTodo(null);
+            setEditingTitle('');
+        }
     };
 
     return (
@@ -35,11 +50,26 @@ export default function Todos() {
                 <button onClick={handleAddTodo}>ADD</button>
             </div>
             {todos && todos.length > 0 ? (
-                <ul>
+                <ul className='todo-list'>
                     {todos.map(todo => (
-                        <li key={todo.id}>
-                            {todo.title}
-                            <button onClick={() => handleDeleteTodo(todo.id)}>DELETE</button>
+                        <li className='todo-raw' key={todo.id}>
+                            {editingTodo && editingTodo.id === todo.id ? (
+                                <div className='todo-buttons'>
+                                    <input
+                                        type="text"
+                                        value={editingTitle}
+                                        onChange={(e) => setEditingTitle(e.target.value)}
+                                    />
+                                    <button onClick={handleSaveEdit}>Save</button>
+                                    <button onClick={() => setEditingTodo(null)}>Cancel</button>
+                                </div>
+                            ) : (
+                                <div>
+                                    {todo.title}
+                                    <button onClick={() => handleEditTodo(todo)}>Edit</button>
+                                    <button onClick={() => handleDeleteTodo(todo.id)}>Delete</button>
+                                </div>
+                            )}
                         </li>
                     ))}
                 </ul>
