@@ -44,8 +44,11 @@
 }
 
 .todo-raw{
+  padding-top: 5px;
 
 }
 .todo-buttons {
-  padding-left: 50px;
+ max-width: 55%;
+ display:flex ;
+ justify-content:space-between;
 }

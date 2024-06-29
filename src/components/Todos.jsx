@@ -54,7 +54,7 @@ export default function Todos() {
                     {todos.map(todo => (
                         <li className='todo-raw' key={todo.id}>
                             {editingTodo && editingTodo.id === todo.id ? (
-                                <div className='todo-buttons'>
+                                <div>
                                     <input
                                         type="text"
                                         value={editingTitle}
@@ -64,10 +64,13 @@ export default function Todos() {
                                     <button onClick={() => setEditingTodo(null)}>Cancel</button>
                                 </div>
                             ) : (
-                                <div>
-                                    {todo.title}
+                                <div  className='todo-buttons'>
+                                    <span>{todo.title}</span>
+                                    <span>
                                     <button onClick={() => handleEditTodo(todo)}>Edit</button>
                                     <button onClick={() => handleDeleteTodo(todo.id)}>Delete</button>
+                                    </span>
+                                    
                                 </div>
                             )}
                         </li>
